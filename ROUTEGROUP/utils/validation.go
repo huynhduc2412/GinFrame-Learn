@@ -5,6 +5,8 @@ import (
 	"regexp"
 	"strconv"
 
+	"github.com/gin-gonic/gin"
+	"github.com/go-playground/validator/v10"
 	"github.com/google/uuid"
 )
 
@@ -60,4 +62,18 @@ func keys(m map[string]struct{}) []string {
 		k = append(k , key)
 	}
 	return k
+}
+func HandleValidationErrors(err error) gin.H {
+	if validationError , ok := err.(validator.ValidationErrors) ; ok {
+		errors := make(map[string]string)
+		for _ , e := range validationError {
+				errors[e.Field()] = e.Field() + e.Tag()
+		}
+		return gin.H{
+			"error" : errors,
+		}
+	}
+	return gin.H{
+		"error" : err.Error(),
+	}
 }

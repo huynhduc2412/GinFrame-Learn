@@ -35,6 +35,11 @@ func main() {
 		category := v1.Group("/categories")
 		categoryHandlerV1 := v1handler.NewCategorytHandler()
 		category.GET("/:category" , categoryHandlerV1.GetCategoryByCategoryV1)
+
+		new := v1.Group("/news")
+		newHandlerV1 := v1handler.NewNewsHandler()
+		new.GET("/" , newHandlerV1.GetNewsV1)
+		new.GET("/:slug" , newHandlerV1.GetNewsV1)
 	}
 
 	v2 := r.Group("/api/v2")
